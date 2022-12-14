@@ -9,9 +9,6 @@ import json
 try:
     humanitec_token = os.environ['HUMANITEC_TOKEN']
     humanitec_org = os.environ['HUMANITEC_ORG']
-    aws_username = os.environ['INSTRUQT_AWS_ACCOUNT_AWS_ACCOUNT_USERNAME']
-    aws_password = os.environ['INSTRUQT_AWS_ACCOUNT_AWS_ACCOUNT_PASSWORD']
-    aws_id = os.environ['INSTRUQT_AWS_ACCOUNT_AWS_ACCOUNT_USERNAME']
     gcp_username = os.environ['INSTRUQT_GCP_PROJECT_GCP_PROJECT_USER_EMAIL']
     gcp_password = os.environ['INSTRUQT_GCP_PROJECT_GCP_PROJECT_USER_PASSWORD']
     gcp_id = os.environ['INSTRUQT_GCP_PROJECT_GCP_PROJECT_PROJECT_ID']
@@ -19,9 +16,6 @@ try:
     gke_endpoint = os.environ['GKE_ENDPOINT']
     k8_gcpprojectid = os.environ ['INSTRUQT_GCP_PROJECT_GCP_PROJECT_PROJECT_ID']
     k8_gcpzone = os.environ ['GOOGLE_ZONE']
-    aws_key = os.environ ['INSTRUQT_AWS_ACCOUNT_AWS_ACCOUNT_AWS_ACCESS_KEY_ID']
-    aws_secret = os.environ ['INSTRUQT_AWS_ACCOUNT_AWS_ACCOUNT_AWS_SECRET_ACCESS_KEY']
-    eks_endpoint = os.environ ['EKS_ENDPOINT'] 
     random = os.environ ['UNIQUE']
     sql_usr = os.environ ['SQL_USR']
     sql_pass = os.environ ['SQL_PASS']
@@ -107,56 +101,4 @@ if response.status_code==200:
 else:
     print(f"Unable to create Namepsace resource definition. POST {url} returned status code {response.status_code}.")
     
-
-# Register AWS Resource Account 
-##########################################################
-url = f"https://{humanitec_url}/orgs/{humanitec_org}/resources/accounts"
-payload = {
-    "credentials": {
-        "access_key_id": f"{aws_key}",
-        "secret_key_id": f"{aws_secret}"     
-      },
-    "id" : f"{aws_id}",
-    "name": f"{aws_id}",
-    "type": "aws"
-}
-response = requests.request("POST", url, headers=headers, json=payload)
-if response.status_code==200:
-    print(f"The resource AWS account has been registered.")
-elif response.status_code==409:
-    print(f"Unable to create AWS resource account. Account with id aws-instruqt already exists.")
-else:
-    print(f"Unable to create AWS resource account. POST {url} returned status code {response.status_code}.")
-
-
-# Register EKS Cluster
-##########################################################
-url = f"https://{humanitec_url}/orgs/{humanitec_org}/resources/defs"
-payload = {
-    "id": f"eks-{random}",
-    "name": f"eks-{random}",
-    "type": "k8s-cluster",
-    "driver_type": "humanitec/k8s-cluster-eks",
-    "driver_inputs": {
-      "secrets": {
-         "credentials": {
-            "aws_access_key_id": f"{aws_key}",
-            "aws_secret_access_key": f"{aws_secret}"
-          }
-      },
-      "values": {
-        "loadbalancer": f"{eks_endpoint}",
-        "loadbalancer_hosted_zone": "eu-west-1",
-        "name": "humanitec-eks",
-        "region": "eu-west-1"
-      }
-    }
-}
-
-response = requests.request("POST", url, headers=headers, json=payload)
-if response.status_code==200:
-    print(f"The EKS resource definition has been registered.")
-else:
-    print(f"Unable to create EKS resource account. POST {url} returned status code {response.status_code}.")
-
 
