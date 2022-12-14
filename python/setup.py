@@ -22,11 +22,6 @@ try:
     sql_connection = os.environ['SQL_CONNECTION']
     
     # gke_payload = os.environ['GKE_PAYLOAD']
-    # azure_client_id = os.environ ['RANDOM']
-    # azure_client_secret = os.environ ['RANDOM']
-    # azure_subscription_id = os.environ ['RANDOM']
-    # azure_tenant_id = os.environ ['RANDOM']
-    # aks_endpoint = os.environ ['RANDOM']
 
 
 except Exception as e:
