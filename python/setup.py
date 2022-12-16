@@ -95,5 +95,3 @@ if response.status_code==200:
     print(f"The Namespace resource definition has been registered.")
 else:
     print(f"Unable to create Namepsace resource definition. POST {url} returned status code {response.status_code}.")
-    
-
